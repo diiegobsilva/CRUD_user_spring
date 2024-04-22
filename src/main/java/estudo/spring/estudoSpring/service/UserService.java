@@ -1,6 +1,7 @@
 package estudo.spring.estudoSpring.service;
 
 import estudo.spring.estudoSpring.controller.CreateUserDto;
+import estudo.spring.estudoSpring.controller.UpdateUserDto;
 import estudo.spring.estudoSpring.entity.User;
 import estudo.spring.estudoSpring.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,25 @@ public class UserService {
 
     public List<User> listUsers(){
         return userRepository.findAll();
+    }
+
+    public void updateUserById(String userId, UpdateUserDto updateUserDto){
+        var id = UUID.fromString(userId);
+
+        var userEntity = userRepository.findById(id);
+
+        if(userEntity.isPresent()){
+            var user = userEntity.get();
+
+            if(updateUserDto.username() != null){
+                user.setUsername(updateUserDto.username());
+            }
+            if(updateUserDto.cargo() != null){
+                user.setCargo(updateUserDto.cargo());
+            }
+
+            userRepository.save(user);
+        }
     }
 
     public void deleteById(String userId){
